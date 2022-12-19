@@ -3,7 +3,7 @@
     <div class="top">
       <div>
         <a-button size="small" shape="circle" class="play-buttons" :disabled="disabled">
-          <align-center-outlined rotate="90" class="play-icons"/>
+          <align-center-outlined :rotate="90" class="play-icons"/>
         </a-button>
       </div>
       <div class="audio-name">
@@ -77,7 +77,7 @@ import WaveSurfer from 'wavesurfer.js'
 import { BackwardOutlined, PlayCircleOutlined, ForwardOutlined, SoundOutlined, DownloadOutlined,
           ZoomInOutlined, ZoomOutOutlined, AlignCenterOutlined} from "@ant-design/icons-vue";
 import { defineComponent, ref} from "vue";
-import Timer from "@/components/wavesurfer/Timer.vue";
+import Timer from "@/components/util/Timer.vue";
 
 export default {
   name: "BasicWave",
@@ -221,8 +221,7 @@ export default {
   width: 850px;
   height: 188px;
   box-shadow: gainsboro;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding: 10px;
 }
 
 .top {
