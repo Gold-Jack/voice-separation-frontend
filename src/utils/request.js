@@ -1,14 +1,14 @@
 import axios from 'axios'
 import router from "@/router";
-import {ElMessage} from "element-plus";
 
 const request = axios.create({
     baseURL: '/universal-prefix',  // 统一前缀
-    timeout: 5000
 })
 
 // 请求白名单，如果请求在白名单里面，将不会被拦截校验权限
-const whiteUrls = ["/user/login", '/user/register', '/user/logout', '/user/**', '/file/download']
+const whiteUrls = ["/user/login", '/user/register', '/user/logout', '/user/**',
+    '/file/download',
+    '/multi-voice/separate/by-source-audio-url', '/single-voice/**']
 
 // request 拦截器
 // 可以自请求发送前对请求做一些处理

@@ -7,7 +7,7 @@
         </a-button>
       </div>
       <div class="audio-name">
-        &nbsp;&nbsp;{{ audioName }}
+        &nbsp;&nbsp;{{ this.audioName }}
       </div>
       <div class="top-mid">
 <!--        top-mid-->
@@ -78,10 +78,27 @@ import { BackwardOutlined, PlayCircleOutlined, ForwardOutlined, SoundOutlined, D
           ZoomInOutlined, ZoomOutOutlined, AlignCenterOutlined} from "@ant-design/icons-vue";
 import { defineComponent, ref} from "vue";
 import Timer from "@/components/util/Timer.vue";
+import request from "@/utils/request";
+import {message} from "ant-design-vue";
 
 export default {
   name: "BasicWave",
-  props: ["audioName", "audioUrl"],
+  props: {
+    'audioUrl': {
+      type: String,
+      required: true,
+    },
+    'audioName': {
+      type: String,
+      required: false,
+      default: "<AUDIO_NAME>.wav"
+    },
+    'uid': {
+      type: String,
+      required: false,
+      default: '0'
+    }
+  },
   components: {
     Timer,
     BackwardOutlined,
@@ -95,14 +112,29 @@ export default {
   },
   data() {
     return {
-      wavesurfer: null,
+      // wavesurfer: null,
       noSound: false,
       mute_: false,
     };
   },
   watch: {
+    audioUrl() {
+      this.wavesurfer.load(this.audioUrl);
+    }
   },
   mounted() {
+    let audioNameUpdate = () => {
+      if (this.audioName === null) {
+        request.get('/file/get/filename', {params: {downloadUrl: this.audioUrl}}).then(res => {
+          if (res.data.code === 'CODE_200') {
+            this.audioName = res.data.data;
+          } else {
+            message.error(res.data.code + "\n" + res.data.msg);
+          }
+        })
+      }
+    }
+
     // this.$nextTick(() => {
     //   // console.log(WaveSurfer)
     // });
@@ -127,10 +159,11 @@ export default {
 
     // 每100毫秒执行一次，对currentTime进行更新
     setInterval(() => {
+      audioNameUpdate();
       this.currentTime = this.wavesurfer.getCurrentTime();
       this.duration = this.wavesurfer.getDuration();
       // console.log(this.currentTime);
-    }, 100)
+    }, 100);
   },
   methods: {
     getCurrentTime() {
@@ -202,6 +235,8 @@ export default {
     let duration = ref(0);
     let currentTime = ref(0);
 
+    let wavesurfer = ref(null);
+
     return {
       soundVolume,
       disabled,
@@ -210,7 +245,8 @@ export default {
       zoomBase,
       zoom_,
       duration,
-      currentTime
+      currentTime,
+      wavesurfer
     }
   }
 }
@@ -221,7 +257,7 @@ export default {
   width: 850px;
   height: 188px;
   box-shadow: gainsboro;
-  padding: 10px;
+  margin-bottom: 80px;
 }
 
 .top {

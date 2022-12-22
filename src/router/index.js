@@ -1,20 +1,46 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import Layout from "@/components/Layout.vue";
 
 const routes = [
   {
     path: '/',
-    name: 'home',
-    component: HomeView
+    name: 'Layout',
+    redirect: '/home',
+    component: Layout,
+    children: [
+      {
+        path: '/home',
+        name: 'Home',
+        component: () => import('../views/HomeView.vue')
+      },
+      {
+        path: '/about',
+        name: 'about',
+        component: () => import('../components/About.vue')
+      },
+      {
+        path: '/separate/two-voice',
+        name: 'SeparateTwoVoice',
+        component: () => import('../components/separate/SeparateTwoVoice.vue')
+      },
+      {
+        path: '/separate/voice-noise',
+        name: 'SeparateVoiceNoise',
+        component: () => import('../components/separate/SeparateVoiceNoise.vue')
+      },
+      {
+        path: '/recording',
+        name: 'Recorder',
+        component: () => import('../components/recorder/Recorder.vue')
+      },
+      {
+        path: '/personal/account',
+        name: 'Personal-Account',
+        component: () => import('../components/personal/Account.vue')
+      }
+    ]
   },
-  {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-  }
 ]
 
 const router = createRouter({
