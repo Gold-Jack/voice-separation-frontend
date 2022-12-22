@@ -19,8 +19,8 @@
       </div>
       <div class="footer-info-title">
         Contact us
-        <a-list-item class="footer-info-item">
-          Blogs: gold-jack.github.io
+        <a-list-item class="footer-info-item" @click="jump(blog)">
+          Blog: {{ blog }}
         </a-list-item>
         <a-list-item class="footer-info-item">
           E-mail: gold_jack@163.com
@@ -40,8 +40,22 @@
 </template>
 
 <script>
+import router from "@/router";
+import {ref} from "vue";
+
 export default {
-  name: "Footer"
+  name: "Footer",
+  methods: {
+    jump(url) {
+    },
+  },
+  setup() {
+    let blog = ref("gold-jack.github.io");
+
+    return {
+      blog,
+    }
+  }
 }
 </script>
 
@@ -73,5 +87,6 @@ export default {
   background-color: black;
   font-size: medium;
   font-family: "Times New Roman", serif;
+  cursor: pointer;
 }
 </style>

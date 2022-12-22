@@ -5,18 +5,27 @@
               style="margin-bottom: 40px; width: 52%; margin-left: 25%">
       Separate!
     </a-button>
-    <wave-source v-model:audio-url="this.sourceAudioUrl"
+    <TextDivider text="Source Audio"
+                 v-show="sourceAudioShow"
+                 class="two-voice-separate-audio-wave"/>
+    <BasicWave v-model:audio-url="sourceAudioUrl"
                v-show="sourceAudioShow"
+               uid="wave0"
                class="two-voice-separate-audio-wave"
     />
-<!--    <wave-s1 v-model:audio-url="this.audio_s1"-->
-<!--               v-show="separateAudioShow"-->
-<!--               class="two-voice-separate-audio-wave"-->
-<!--    />-->
-<!--    <wave-s2 v-model:audio-url="this.audio_s2"-->
-<!--               v-show="separateAudioShow"-->
-<!--               class="two-voice-separate-audio-wave"-->
-<!--    />-->
+    <TextDivider text="Separated Audio"
+                 v-show="separateAudioShow"
+                 class="two-voice-separate-audio-wave"/>
+    <BasicWave v-model:audio-url="audio_s1"
+               v-show="separateAudioShow"
+               uid="wave1"
+               class="two-voice-separate-audio-wave"
+    />
+    <BasicWave v-model:audio-url="audio_s2"
+               v-show="separateAudioShow"
+               uid="wave2"
+               class="two-voice-separate-audio-wave"
+    />
   </div>
 </template>
 
@@ -28,14 +37,16 @@ import {message} from "ant-design-vue";
 import {defineAsyncComponent, ref} from "vue";
 import request from "@/utils/request";
 import axios from "axios";
+import TextDivider from "@/components/util/TextDivider.vue";
 
 export default {
   name: "SeparateTwoVoice",
   components: {
+    TextDivider,
     BasicWave, Uploader, Header,
-    waveSource: defineAsyncComponent(() => import('@/components/wavesurfer/BasicWave.vue')),
-    waveS1: defineAsyncComponent(() => import('@/components/wavesurfer/BasicWave.vue')),
-    waveS2: defineAsyncComponent(() => import('@/components/wavesurfer/BasicWave.vue'))
+    // waveSource: defineAsyncComponent(() => import('@/components/wavesurfer/BasicWave.vue')),
+    // waveS1: defineAsyncComponent(() => import('@/components/wavesurfer/BasicWave.vue')),
+    // waveS2: defineAsyncComponent(() => import('@/components/wavesurfer/BasicWave.vue'))
   },
   data() {
     return {
@@ -58,11 +69,10 @@ export default {
           {params: {userId: userId, url: sourceAudioUrl}})
           .then(res => {
         if (res.code === "CODE_200") {
-          console.log(res.data);
-          console.log(res.data[0]);
           sessionStorage.setItem('s1', res.data[0]);
           sessionStorage.setItem('s2', res.data[1]);
           message.success("Separation finished.");
+          this.$router.go(0);
         } else {
           message.error(res.code);
         }

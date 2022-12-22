@@ -23,7 +23,7 @@
       </div>
     </div>
     <div class="card-medium">
-      <div id="waveform" style="width: inherit; margin-left: 1px; margin-right: 1px">
+      <div :id=this.uid style="width: 100%; margin-left: 1px; margin-right: 1px">
         <!-- Here be the waveform -->
       </div>
       <a-divider style="margin-top: 1px; margin-bottom: 1px" dashed/>
@@ -88,15 +88,15 @@ export default {
       type: String,
       required: true,
     },
-    'audioName': {
-      type: String,
-      required: false,
-      default: "<AUDIO_NAME>.wav"
-    },
+    // 'audioName': {
+    //   type: String,
+    //   required: false,
+    //   default: "<AUDIO_NAME>.wav"
+    // },
     'uid': {
       type: String,
-      required: false,
-      default: '0'
+      required: true,
+      // default: "wave0"
     }
   },
   components: {
@@ -120,46 +120,48 @@ export default {
   watch: {
     audioUrl() {
       this.wavesurfer.load(this.audioUrl);
+      request.get('/file/get/filename', {params: {downloadUrl: this.audioUrl}}).then(res => {
+        if (res.code === 'CODE_200') {
+          // console.log(res.data);
+          this.audioName = res.data;
+        } else {
+          message.error(res.code);
+        }
+      })
     }
   },
   mounted() {
-    let audioNameUpdate = () => {
-      if (this.audioName === null) {
-        request.get('/file/get/filename', {params: {downloadUrl: this.audioUrl}}).then(res => {
-          if (res.data.code === 'CODE_200') {
-            this.audioName = res.data.data;
-          } else {
-            message.error(res.data.code + "\n" + res.data.msg);
-          }
-        })
-      }
-    }
+    // let audioNameUpdate = () => {
+    //   if (this.audioName === "<AUDIO_NAME>.wav") {
+    //
+    //   }
+    // }
 
-    // this.$nextTick(() => {
-    //   // console.log(WaveSurfer)
-    // });
-    this.wavesurfer = WaveSurfer.create({
-      container: "#waveform",
-      waveColor: '#d299e9',
-      progressColor: '#8c11a0',
-      height: '150',
-      width: '230',
-      // backend: 'MediaElement',   // 这里会造成鼠标点击失焦的bug，故不采用backend
-      mediaControls: false,
-      audioRate: '1',
-      cursorWidth: '1',
-      cursorColor: 'rgba(6,108,234,0.12)',
-    });
-    // 结束播放
-    this.wavesurfer.on("finish", () => {
-      this.wavesurfer.pause();
-    });
+    this.$nextTick(() => {
+      // console.log(WaveSurfer);
+      this.wavesurfer = WaveSurfer.create({
+        container: "#" + this.uid,
+        waveColor: '#d299e9',
+        progressColor: '#8c11a0',
+        height: '150',
+        width: '230',
+        // backend: 'MediaElement',   // 这里会造成鼠标点击失焦的bug，故不采用backend
+        mediaControls: false,
+        audioRate: '1',
+        cursorWidth: '1',
+        cursorColor: 'rgba(6,108,234,0.12)',
+      });
+      // 结束播放
+      this.wavesurfer.on("finish", () => {
+        this.wavesurfer.pause();
+      });
 
-    this.wavesurfer.load(this.audioUrl);
+      this.wavesurfer.load(this.audioUrl);
+    });
 
     // 每100毫秒执行一次，对currentTime进行更新
     setInterval(() => {
-      audioNameUpdate();
+      // audioNameUpdate();
       this.currentTime = this.wavesurfer.getCurrentTime();
       this.duration = this.wavesurfer.getDuration();
       // console.log(this.currentTime);
@@ -237,6 +239,8 @@ export default {
 
     let wavesurfer = ref(null);
 
+    let audioName = ref("<AUDIO_NAME>.wav");
+
     return {
       soundVolume,
       disabled,
@@ -246,7 +250,8 @@ export default {
       zoom_,
       duration,
       currentTime,
-      wavesurfer
+      wavesurfer,
+      audioName
     }
   }
 }
