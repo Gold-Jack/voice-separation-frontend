@@ -1,8 +1,10 @@
 <template>
-  <div>
+  <div style="display: flex; flex-direction: column; min-height: 100%">
     <Header/>
-    <router-view/>
-    <Footer/>
+    <div style="flex: 1">
+      <router-view/>
+    </div>
+    <Footer style="bottom: 0; width: 100%"/>
   </div>
 </template>
 

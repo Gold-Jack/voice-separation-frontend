@@ -1,12 +1,14 @@
 <template>
   <div class="header">
-    <a-space style="display: flex; padding: 10px">
+    <a-space class="main-space" size="large">
       <img alt="voice-separation.icon" src="../assets/wave.png" style="cursor:pointer;" @click="$router.push('/home')">
       <div class="app-name">
         Voice Separation
       </div>
       <a-divider type="vertical" style="height: 40px; background-color: white"></a-divider>
-      <div class="header-title" @click="$router.push('/home')">
+    </a-space>
+    <a-space>
+      <div class="header-title header-title-item" @click="$router.push('/home')">
         Home
       </div>
       <div class="header-title header-title-item" @click.prevent>
@@ -36,7 +38,11 @@
            @click="$router.push('/about')">
         About
       </div>
-      <div class="header-title" style="margin-left: 480px"
+    </a-space>
+    <div style="flex: 20%">
+    </div>
+    <a-space>
+      <div class="header-title header-title-item" style="flex: 15%"
            @click="$router.push('/personal/account')">
         Personal Account
       </div>
@@ -45,8 +51,6 @@
 </template>
 
 <script>
-import {ref} from "vue";
-import router from "@/router";
 
 export default {
   name: "Header",
@@ -65,8 +69,14 @@ export default {
 .header {
   background-color: black;
   width: 100%;
-  height: 70px;
+  height: 10%;
   text-align: center;
+  display: flex;
+  flex-direction: row;
+}
+
+.main-space {
+  padding: 0.8%;
 }
 
 .app-name {
@@ -80,12 +90,13 @@ export default {
   font-size: x-large;
   font-family: "Times New Roman",serif;
   font-weight: bold;
-  margin-left: 30px;
+  /*margin-left: 50px;*/
+  margin-right: 50px;
   cursor: pointer;
 }
 
 .header-title-item {
-  padding-left: 30px;
+  /*flex: 50%;*/
 }
 
 .menu-item {

@@ -101,8 +101,8 @@ export default {
 
 <style scoped>
 .uploader {
-  width: 800px;
-  height: 180px;
-  margin: 50px;
+  width: 52%;
+  height: 33%;
+  margin: 2%;
 }
 </style>

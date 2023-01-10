@@ -65,6 +65,7 @@ export default {
   color: white;
   text-align: center;
   width: 100%;
+  height: 240px;
 }
 
 .app-name {
@@ -86,7 +87,7 @@ export default {
   color: white;
   background-color: black;
   font-size: medium;
-  font-family: "Times New Roman", serif;
+  font-family: Cambria, serif;
   cursor: pointer;
 }
 </style>

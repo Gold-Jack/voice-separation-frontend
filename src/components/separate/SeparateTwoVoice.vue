@@ -1,30 +1,34 @@
 <template>
   <div style="display: flex; flex-direction: column">
+    <div class="separate-page-title">
+      Two-Voice Separation
+    </div>
     <Uploader class="uploader"/>
     <a-button type="primary" @click="twoVoiceSeparate"
-              style="margin-bottom: 40px; width: 52%; margin-left: 25%">
+              style="margin-bottom: 2%; width: 52%; margin-left: 25%;
+              background-color: lightslategray; border-color: lightslategray">
       Separate!
     </a-button>
     <TextDivider text="Source Audio"
                  v-show="sourceAudioShow"
-                 class="two-voice-separate-audio-wave"/>
+                 class="voice-separate-audio-wave"/>
     <BasicWave v-model:audio-url="sourceAudioUrl"
                v-show="sourceAudioShow"
                uid="wave0"
-               class="two-voice-separate-audio-wave"
+               class="voice-separate-audio-wave"
     />
     <TextDivider text="Separated Audio"
                  v-show="separateAudioShow"
-                 class="two-voice-separate-audio-wave"/>
+                 class="voice-separate-audio-wave"/>
     <BasicWave v-model:audio-url="audio_s1"
                v-show="separateAudioShow"
                uid="wave1"
-               class="two-voice-separate-audio-wave"
+               class="voice-separate-audio-wave"
     />
     <BasicWave v-model:audio-url="audio_s2"
                v-show="separateAudioShow"
                uid="wave2"
-               class="two-voice-separate-audio-wave"
+               class="voice-separate-audio-wave"
     />
   </div>
 </template>
@@ -63,6 +67,11 @@ export default {
       if (user !== null)
         userId = user.userId;
 
+      if (sourceAudioUrl == null) {
+        message.info("Please upload source-audio first.");
+        return;
+      }
+
       let sourceAudioUrl = sessionStorage.getItem('source-file-url');
       // console.log(sourceAudioUrl)
       request.get('http://localhost:8080/multi-voice/separate/by-source-audio-url',
@@ -71,8 +80,8 @@ export default {
         if (res.code === "CODE_200") {
           sessionStorage.setItem('s1', res.data[0]);
           sessionStorage.setItem('s2', res.data[1]);
-          message.success("Separation finished.");
           this.$router.go(0);
+          message.success("Separation finished.");
         } else {
           message.error(res.code);
         }
@@ -107,15 +116,11 @@ export default {
   },
   setup() {
     let sourceAudioUrl = ref('http://localhost:8080/test.wav');
-    let sourceAudioShow = ref(true);
+    let sourceAudioShow = ref(false);
 
     let audio_s1 = ref('http://localhost:8080/test-s1.wav');
     let audio_s2 = ref('http://localhost:8080/test-s2.wav');
     let separateAudioShow = ref(false);
-
-    // const waveSource = () => import('@/components/wavesurfer/BasicWave.vue');
-    // const waveS1 = () => import('@/components/wavesurfer/BasicWave.vue');
-    // const waveS2 = () => import('@/components/wavesurfer/BasicWave.vue');
 
     return {
       sourceAudioUrl,
@@ -129,11 +134,18 @@ export default {
 </script>
 
 <style scoped>
+.separate-page-title {
+  margin-top: 3%;
+  font-family: Cambria, system-ui;
+  font-size: xxx-large;
+  color: darkslategray;
+}
+
 .uploader {
   margin-left: 25%;
 }
 
-.two-voice-separate-audio-wave {
+.voice-separate-audio-wave {
   margin-left: 23%;
 }
 </style>
