@@ -67,12 +67,13 @@ export default {
       if (user !== null)
         userId = user.userId;
 
+
+      let sourceAudioUrl = sessionStorage.getItem('source-file-url');
       if (sourceAudioUrl == null) {
         message.info("Please upload source-audio first.");
         return;
       }
 
-      let sourceAudioUrl = sessionStorage.getItem('source-file-url');
       // console.log(sourceAudioUrl)
       request.get('http://localhost:8080/multi-voice/separate/by-source-audio-url',
           {params: {userId: userId, url: sourceAudioUrl}})
