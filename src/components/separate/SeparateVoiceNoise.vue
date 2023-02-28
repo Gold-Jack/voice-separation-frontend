@@ -54,6 +54,7 @@ export default {
         return;
       }
       // console.log(sourceAudioUrl)
+      message.info("Separating...");
       request.get('http://localhost:8080/single-voice/separate/by-source-audio-url',
           {params: {userId: userId, url: sourceAudioUrl}})
           .then(res => {

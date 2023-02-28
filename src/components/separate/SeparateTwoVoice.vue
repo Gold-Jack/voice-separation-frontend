@@ -75,6 +75,7 @@ export default {
       }
 
       // console.log(sourceAudioUrl)
+      message.info("Separating...");
       request.get('http://localhost:8080/multi-voice/separate/by-source-audio-url',
           {params: {userId: userId, url: sourceAudioUrl}})
           .then(res => {
