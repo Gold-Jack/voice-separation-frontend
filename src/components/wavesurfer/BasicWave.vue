@@ -120,10 +120,10 @@ export default {
   watch: {
     audioUrl() {
       this.wavesurfer.load(this.audioUrl);
-      request.get('/file/get/filename', {params: {downloadUrl: this.audioUrl}}).then(res => {
+      request.get('/file/get/audioname', {params: {downloadUrl: this.audioUrl}}).then(res => {
         if (res.code === 'CODE_200') {
           // console.log(res.data);
-          this.audioName = res.data;
+          this.audioName = JSON.parse(res.data).audioName;
         } else {
           message.error(res.code);
         }
