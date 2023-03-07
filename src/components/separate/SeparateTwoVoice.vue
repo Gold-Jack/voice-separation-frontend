@@ -14,7 +14,7 @@
                  class="voice-separate-audio-wave"/>
     <BasicWave v-model:audio-url="sourceAudioUrl"
                v-show="sourceAudioShow"
-               uid="wave0"
+               uid="multi-wave-0"
                class="voice-separate-audio-wave"
     />
     <TextDivider text="Separated Audio"
@@ -22,12 +22,12 @@
                  class="voice-separate-audio-wave"/>
     <BasicWave v-model:audio-url="audio_s1"
                v-show="separateAudioShow"
-               uid="wave1"
+               uid="multi-wave-1"
                class="voice-separate-audio-wave"
     />
     <BasicWave v-model:audio-url="audio_s2"
                v-show="separateAudioShow"
-               uid="wave2"
+               uid="multi-wave-2"
                class="voice-separate-audio-wave"
     />
   </div>
@@ -56,7 +56,8 @@ export default {
     return {
       source: 'source',
       s1: "s1",
-      s2: "s2"
+      s2: "s2",
+      sourceUrlIdx: 'source-file-url'
     }
   },
   methods: {
@@ -68,7 +69,7 @@ export default {
         userId = user.userId;
 
 
-      let sourceAudioUrl = sessionStorage.getItem('source-file-url');
+      let sourceAudioUrl = sessionStorage.getItem(this.sourceUrlIdx);
       if (sourceAudioUrl == null) {
         message.info("Please upload source-audio first.");
         return;
@@ -80,8 +81,8 @@ export default {
           {params: {userId: userId, url: sourceAudioUrl}})
           .then(res => {
         if (res.code === "CODE_200") {
-          sessionStorage.setItem('s1', res.data[0]);
-          sessionStorage.setItem('s2', res.data[1]);
+          sessionStorage.setItem('multi1', res.data[0]);
+          sessionStorage.setItem('multi2', res.data[1]);
           this.$router.go(0);
           message.success("Separation finished.");
         } else {
@@ -92,7 +93,7 @@ export default {
   },
   mounted() {
     let updateUrl = () => {
-      let sourceAudioUrl_ = sessionStorage.getItem('source-file-url');
+      let sourceAudioUrl_ = sessionStorage.getItem(this.sourceUrlIdx);
       if (sourceAudioUrl_ === null) {
         return;
       }
@@ -101,8 +102,8 @@ export default {
       this.sourceAudioShow = true;
     }
 
-    let s1 = sessionStorage.getItem('s1');
-    let s2 = sessionStorage.getItem('s2');
+    let s1 = sessionStorage.getItem('multi1');
+    let s2 = sessionStorage.getItem('multi2');
     let updateS1S2 = () => {
       if (s1 === null && s2 === null)
         return;

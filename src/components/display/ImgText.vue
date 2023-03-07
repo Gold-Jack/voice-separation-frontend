@@ -8,7 +8,7 @@
       <div class="sub-title">
         {{ subTitle }}
       </div>
-      <div style="padding-left: 42%">
+      <div style="width: 100%">
         <div class="link-echo" @click="$router.push(link)">
           {{ linkEcho }}
         </div>
@@ -69,6 +69,8 @@ export default {
   background-color: v-bind(bkgColor);
   display: flex;
   flex-direction: v-bind(arrangement);
+  padding-left: 6%;
+  padding-right: 7%;
 }
 
 .image-icon {
@@ -89,15 +91,15 @@ export default {
   font-size: 40px;
   font-family: Arial, Helvetica, sans-serif;
   color: black;
-  padding-top: 150px;
-  padding-bottom: 10px;
+  padding-top: 30%;
+  padding-bottom: 2%;
 }
 
 .sub-title {
   font-size: 20px;
   font-family: "Microsoft JhengHei",serif;
   color: black;
-  padding-bottom: 30px;
+  padding-bottom: 5%;
 }
 
 .link-echo {
@@ -108,6 +110,7 @@ export default {
   border: 2px slategray;
   border-radius: 3px;
   background-color: lightgoldenrodyellow;
-  width: 120px;
+  width: 25%;
+  margin-left: 37.5%;
 }
 </style>

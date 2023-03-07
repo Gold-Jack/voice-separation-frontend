@@ -34,6 +34,10 @@ export default {
     InboxOutlined
   },
   props: {
+    // 'sourceUrlIdx': {
+    //   type: String,
+    //   required: true
+    // }
   },
   data() {
     return {
@@ -44,22 +48,25 @@ export default {
     let originFile = ref();
 
     // fileUploader是设置了multipart/form-data的axios请求器，调用后可以对后端发起一次文件上传请求
-    let fileUploader = (file_num = 0) => axios({
-      url: '/universal-prefix/file/upload',
-      method: 'post',
-      // data: {file: fileList[file_num].originFileObj},
-      data: {file: originFile.originFileObj},
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    }).then(res => {
-      if (res.data.code === 'CODE_200') {
-        // message.success("File upload succeeded.");
-        sessionStorage.setItem('source-file-url', res.data.data);
-      } else {
-        message.error(res.data.code + "\n" + res.data.data);
-      }
-    });
+    let fileUploader = (file_num = 0) => {
+      message.info("uploading...");
+      axios({
+        url: '/universal-prefix/file/upload',
+        method: 'post',
+        // data: {file: fileList[file_num].originFileObj},
+        data: {file: originFile.originFileObj},
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(res => {
+        if (res.data.code === 'CODE_200') {
+          // message.success("File upload succeeded.");
+          sessionStorage.setItem('source-file-url', res.data.data);
+        } else {
+          message.error(res.data.code + "\n" + res.data.data);
+        }
+      })
+    };
 
     const handleChange = info => {
       const status = info.file.status;

@@ -40,6 +40,11 @@ import {message} from "ant-design-vue";
 export default {
   name: "SeparateVoiceNoise",
   components: {BasicWave, TextDivider, Uploader, Header},
+  data() {
+    return {
+      sourceUrlIdx: 'source-file-url'
+    }
+  },
   methods: {
     singleVoiceSeparate() {
       // 后端默认userId=2代表GUEST上传，所以这里如果user===null，也可以不传userId这个param
@@ -48,7 +53,7 @@ export default {
       if (user !== null)
         userId = user.userId;
 
-      let sourceAudioUrl = sessionStorage.getItem('source-file-url');
+      let sourceAudioUrl = sessionStorage.getItem(this.sourceUrlIdx);
       if (sourceAudioUrl == null) {
         message.info("Please upload source-audio first.");
         return;
@@ -59,7 +64,7 @@ export default {
           {params: {userId: userId, url: sourceAudioUrl}})
           .then(res => {
             if (res.code === "CODE_200") {
-              sessionStorage.setItem('s1', res.data[0]);
+              sessionStorage.setItem('single1', res.data[0]);
               this.$router.go(0);
               message.success("Separation finished.");
             } else {
@@ -70,7 +75,7 @@ export default {
   },
   mounted() {
     let updateUrl = () => {
-      let sourceAudioUrl_ = sessionStorage.getItem('source-file-url');
+      let sourceAudioUrl_ = sessionStorage.getItem(this.sourceUrlIdx);
       if (sourceAudioUrl_ === null) {
         this.sourceAudioShow = false;
         return;
@@ -80,7 +85,7 @@ export default {
       this.sourceAudioShow = true;
     }
 
-    let s1 = sessionStorage.getItem('s1');
+    let s1 = sessionStorage.getItem('single1');
     let updateS1 = () => {
       if (s1 === null)
         return;
